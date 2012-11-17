@@ -2,7 +2,7 @@ DragonMBR
 ---
 
 Master Boot Record that displays a dragon using VGA and standard BIOS routines.
-The image is encoded using a run-level encoding to fit in the 512B boot sector. The scheme is a one byte format: 7 bits represent the run and the final bit
+The image is encoded using a run-length encoding to fit in the 512B boot sector. The scheme is a one byte format: 7 bits represent the run and the final bit
 determines the color.
 
      7      1 0
