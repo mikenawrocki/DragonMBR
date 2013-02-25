@@ -1,25 +1,42 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Copyright (c) 2012 Mike Nawrocki <mnawrocki3 at gatech.edu>                ;;
+;;                                                                            ;; 
+;; Permission to use, copy, modify, and distribute this software for any      ;;
+;; purpose with or without fee is hereby granted, provided that the above     ;;
+;; copyright notice and this permission notice appear in all copies.          ;;
+;;                                                                            ;;
+;; THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES   ;;
+;; WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF           ;;
+;; MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR    ;;
+;; ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES     ;;
+;; WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN      ;;
+;; ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF    ;;
+;; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.             ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 org 7C00h
 
 Setup:  
 	mov	sp, 0FF00h       ; Initialize the Stack pointer, arbitrarily
 	mov	ax, 0Dh          ; Initialize the display to mode 0x0D, 320x200
-	int	10h              ;    pixel graphic mode.
+	int	10h              ; pixel graphic mode.
 
 	mov	ax, 0C04h        ; Fill the entire screen with RED
 	mov	dx, 199
 Outer:
 	mov	cx, 319
 Inner:
-	int	10h
+	int	10h              ; Draw one row of the background
 	dec	cx
 	cmp	cx, -1
 	jne short Inner
 
-	dec	dx
+	dec	dx               ; Move down to next row, rinse & repeat
 	mov	cx,dx
 	cmp	cx, -1
 	jne short Outer
 
+DrawDragon:
 	xor	bh, bh           ; Prepare to draw the dragon. Top left corner
 	mov	cx, 100          ; at 100,7 px
 	mov	dx, 7
@@ -78,10 +95,12 @@ Finish:
 	hlt
 	jmp short	Finish
 
+;Variables
 COLOR	dw 0
 YOFFT	dw 100
 DIR	dw 1
 
+; Begin image data
 Image	db 0
 	db 003h
 	db 0FFh
